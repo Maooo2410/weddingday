@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>國誠 & 冠瑩 證婚儀式邀請 | Wedding Invitation</title>
+    <title>國誠 & 冠瑩 婚禮邀請函 | Wedding Invitation</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -80,6 +80,26 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        /* 魔法特效 Canvas 樣式 */
+        #magic-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        /* 懸浮魔法情侶按鈕動態 */
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
     </style>
     <script>
         // 初始化全域提交狀態變數，防止 iframe onload 觸發時 ReferenceError
@@ -88,6 +108,9 @@
 </head>
 <body class="antialiased selection:bg-morandi-warm selection:text-white">
 
+    <!-- 魔法特效繪圖 Canvas Layer -->
+    <canvas id="magic-canvas"></canvas>
+
     <!-- 頂端固定毛玻璃導覽列 -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -95,7 +118,7 @@
                 G & K
             </a>
             <div class="flex space-x-6 text-xs md:text-sm tracking-widest font-medium">
-                <a href="#details" class="hover:text-morandi-warm transition-colors duration-200 py-1">證婚儀式</a>
+                <a href="#details" class="hover:text-morandi-warm transition-colors duration-200 py-1">儀式資訊</a>
                 <a href="#rsvp" class="hover:text-morandi-warm transition-colors duration-200 py-1">出席回函</a>
             </div>
         </div>
@@ -103,28 +126,42 @@
 
     <!-- 首頁全螢幕封面區塊 (圖片置於導覽列正下方，徹底不被遮擋) -->
     <section class="relative pt-16 bg-morandi-bg">
-        <div class="relative w-full max-w-5xl mx-auto flex items-center justify-center overflow-hidden">
+        <div class="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center overflow-hidden">
+            
+            <!-- 電腦/網頁版專屬：文字在圖片上方獨立顯示 (不與圖片重疊) -->
+            <div class="hidden md:flex flex-col items-center justify-center text-center text-morandi-text z-10 px-4 py-12 animate-fade-in w-full">
+                <p class="font-cormorant italic text-2xl tracking-widest mb-3 text-morandi-warm font-bold">Wedding Invitation</p>
+                <h1 class="text-4xl lg:text-5xl font-bold tracking-wider mb-4 font-serif text-morandi-text">
+                    黃國誠 <span class="font-cormorant font-light mx-2 text-morandi-warm no-underline">&amp;</span> 李冠瑩
+                </h1>
+                <p class="text-base tracking-widest max-w-md mx-auto leading-relaxed font-bold text-morandi-text">
+                    邀請您見證我們的重要時刻
+                </p>
+                <p class="mt-6 font-cormorant text-xl tracking-widest font-bold text-morandi-warmDark">
+                    2027 . 01 . 23
+                </p>
+            </div>
+
             <!-- 手機版封面圖片 -->
             <img src="https://i.postimg.cc/43HjNyFk/0M8A0844-fu-zhi.jpg" 
                  alt="Wedding Cover Mobile" 
                  class="block md:hidden w-full h-auto object-contain object-top" />
             
-            <!-- 電腦/網頁版封面圖片 (圖片寬度同網頁寬度，完整不裁切) -->
+            <!-- 電腦/網頁版封面圖片 (圖片寬度同網頁寬度，獨立接在上方文字下方) -->
             <img src="https://i.postimg.cc/Gm5ZCGKJ/0M8A0844-fu-zhi.jpg" 
                  alt="Wedding Cover Desktop" 
                  class="hidden md:block w-full h-auto object-contain object-top" />
 
-            <!-- 封面文字內容疊加 (下移調整並移除出席回函按鈕) -->
-            <div class="absolute inset-0 flex flex-col items-center justify-end md:justify-center text-center text-white z-10 px-4 pb-16 md:pb-0 md:pt-28 animate-fade-in">
-                <p class="font-cormorant italic text-xl md:text-2xl tracking-widest mb-3 opacity-90 font-bold">Wedding Invitation</p>
-                <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-wider mb-4 font-serif">
-                    黃國誠 <span class="font-cormorant font-light mx-2 text-white no-underline">&amp;</span> 李冠瑩
+            <!-- 手機版封面文字內容疊加 (僅在手機版顯示，位置微調往上移) -->
+            <div class="flex md:hidden absolute inset-0 flex-col items-center justify-end text-center text-morandi-text z-10 px-4 pb-20 animate-fade-in">
+                <p class="font-cormorant italic text-lg tracking-widest mb-2 text-morandi-warm font-bold">Wedding Invitation</p>
+                <h1 class="text-2xl font-bold tracking-wider mb-3 font-serif text-morandi-text">
+                    黃國誠 <span class="font-cormorant font-light mx-2 text-morandi-warm no-underline">&amp;</span> 李冠瑩
                 </h1>
-                <div class="w-16 h-0.5 bg-morandi-warm mx-auto my-6 opacity-80"></div>
-                <p class="text-sm md:text-base tracking-widest opacity-90 max-w-md mx-auto leading-relaxed font-bold">
+                <p class="text-xs tracking-widest text-morandi-text max-w-md mx-auto leading-relaxed font-bold">
                     邀請您見證我們的重要時刻
                 </p>
-                <p class="mt-8 font-cormorant text-lg md:text-xl tracking-widest font-bold text-morandi-sageLight">
+                <p class="mt-4 font-cormorant text-base tracking-widest font-bold text-morandi-warmDark">
                     2027 . 01 . 23
                 </p>
             </div>
@@ -199,7 +236,7 @@
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-12">
                 <p class="font-cormorant text-sm uppercase tracking-widest text-morandi-sage">Wedding Information</p>
-                <h2 class="text-2xl md:text-3xl font-bold text-morandi-text mt-1">證婚儀式</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-morandi-text mt-1">儀式資訊</h2>
                 <div class="w-12 h-0.5 bg-morandi-warm mx-auto mt-4"></div>
             </div>
 
@@ -243,7 +280,7 @@
                 <!-- 儀式溫馨提醒說明 (改至交通指引上方) -->
                 <div class="bg-morandi-sageLight/50 p-5 rounded-2xl text-xs md:text-sm text-morandi-text leading-relaxed space-y-3">
                     <p>
-                        當天以證婚儀式為主，沒有另外安排午宴用餐，還請大家事先留意～
+                        當天以證婚儀式為主，沒有另外安排正式午宴，還請大家事先留意～
                     </p>
                     <p>
                         儀式前後會準備迎賓酒水與一些小點，<br>
@@ -406,9 +443,25 @@
 
     <!-- 頁尾 Footer -->
     <footer class="py-10 bg-morandi-bg border-t border-morandi-warm/15 text-center text-xs text-morandi-muted">
-        <p class="font-cormorant text-lg tracking-widest text-morandi-warm mb-1">Goucheng & Kuanying</p>
+        <p class="font-cormorant text-lg tracking-widest text-morandi-warm mb-1">Guocheng & Kuanying</p>
         <p>2027.01.23 • Wedding Day</p>
     </footer>
+
+    <!-- 右下角手繪魔法情侶懸浮元件 -->
+    <div id="magic-couple-container" class="fixed bottom-4 right-4 z-40 flex flex-col items-center cursor-pointer select-none group">
+        <!-- 「點擊發送魔法祝福」溫潤毛玻璃標籤 -->
+        <div class="mb-1.5 px-3 py-1 rounded-full text-[11px] md:text-xs font-semibold tracking-wider text-morandi-text bg-white/85 backdrop-blur-md border border-morandi-warm/30 shadow-md group-hover:scale-105 group-hover:bg-white transition-all duration-300 flex items-center space-x-1">
+            <i class="fa-solid fa-wand-magic-sparkles text-morandi-warm"></i>
+            <span>點擊發送魔法祝福</span>
+        </div>
+
+        <!-- 手繪魔法情侶圖片 -->
+        <div class="relative animate-float transition-transform duration-300 group-hover:scale-105">
+            <img src="https://i.postimg.cc/wxWB9Kdg/mo-fa-xing-guang-xia-de-shuang-ren-zhou-yu.png" 
+                 alt="魔法星光下的雙人咒語" 
+                 class="w-32 md:w-40 h-auto drop-shadow-lg object-contain pointer-events-none" />
+        </div>
+    </div>
 
     <!-- JavaScript 邏輯 -->
     <script>
@@ -461,6 +514,173 @@
                 successMsg.classList.remove("hidden");
             }
         }
+    </script>
+
+    <!-- 精細優雅金色微光特效 Canvas 與腳本 -->
+    <canvas id="magicCanvas" class="pointer-events-none fixed inset-0 z-[9999]"></canvas>
+    <script>
+        (function() {
+            const canvas = document.getElementById('magicCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = [];
+
+            // 純淨奢華高質感金色調 (無咖啡色、無粉色)
+            const goldColors = [
+                '#FFE89C', // 亮星金
+                '#F3D075', // 暖香檳金
+                '#E5B842', // 曜金
+                '#FFF4CE'  // 白金微光
+            ];
+
+            // 粒子類別
+            class MagicParticle {
+                constructor(x, y, isSparkle = false) {
+                    this.x = x;
+                    this.y = y;
+                    this.isSparkle = isSparkle;
+                    // 更小更細緻的尺寸 (0.8px ~ 2.5px)
+                    this.size = isSparkle ? (Math.random() * 2.5 + 1.5) : (Math.random() * 1.8 + 0.8);
+                    this.color = goldColors[Math.floor(Math.random() * goldColors.length)];
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.015 + 0.012; // 緩慢自然優雅淡出
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8 - 0.2;
+                    this.rotation = Math.random() * Math.PI;
+                    this.rotSpeed = (Math.random() - 0.5) * 0.05;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.rotation += this.rotSpeed;
+                    this.alpha -= this.decay;
+                }
+
+                draw() {
+                    if (this.alpha <= 0) return;
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.translate(this.x, this.y);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 4; // 柔和微光 glow
+
+                    if (this.isSparkle) {
+                        // 四角細緻星芒
+                        ctx.rotate(this.rotation);
+                        ctx.beginPath();
+                        const s = this.size * 1.5;
+                        ctx.moveTo(0, -s);
+                        ctx.quadraticCurveTo(0, 0, s, 0);
+                        ctx.quadraticCurveTo(0, 0, 0, s);
+                        ctx.quadraticCurveTo(0, 0, -s, 0);
+                        ctx.quadraticCurveTo(0, 0, 0, -s);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else {
+                        // 超細小圓點
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+
+            // 滑鼠軌跡：控制產生頻率 (防止過於擁擠)
+            let lastX = 0;
+            let lastY = 0;
+            let lastTime = 0;
+
+            window.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+                
+                // 距離需移動超過 15px 或間隔 > 50ms 才產生粒子，確保疏密極其優雅
+                if (dist > 15 || now - lastTime > 50) {
+                    // 每次移動僅隨機生成 1~2 個極細微粒
+                    const isSparkle = Math.random() < 0.35;
+                    particles.push(new MagicParticle(e.clientX, e.clientY, isSparkle));
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    lastTime = now;
+                }
+            });
+
+            // 觸控支援 (手機版)
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    const touch = e.touches[0];
+                    const now = Date.now();
+                    const dist = Math.hypot(touch.clientX - lastX, touch.clientY - lastY);
+                    if (dist > 18 || now - lastTime > 60) {
+                        particles.push(new MagicParticle(touch.clientX, touch.clientY, Math.random() < 0.3));
+                        lastX = touch.clientX;
+                        lastY = touch.clientY;
+                        lastTime = now;
+                    }
+                }
+            }, { passive: true });
+
+            // 點擊時噴發精緻微小的金色法陣微粒
+            window.addEventListener('click', (e) => {
+                const count = 12; // 溫和不擁擠的點擊數量
+                for (let i = 0; i < count; i++) {
+                    const p = new MagicParticle(e.clientX, e.clientY, i % 2 === 0);
+                    const angle = (Math.PI * 2 / count) * i + (Math.random() * 0.2);
+                    const speed = Math.random() * 1.5 + 0.8;
+                    p.vx = Math.cos(angle) * speed;
+                    p.vy = Math.sin(angle) * speed;
+                    particles.push(p);
+                }
+            });
+
+            // 右下角魔法情侶專屬點擊爆發效果
+            const coupleContainer = document.getElementById('magic-couple-container');
+            if (coupleContainer) {
+                coupleContainer.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止重複觸發預設點擊
+                    
+                    // 在螢幕正中央綻放細碎、細緻且氣勢盛大的純金色系星芒與微粒大煙火
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+
+                    const count = 140; // 140 顆細碎細緻微粒大煙火
+                    for (let i = 0; i < count; i++) {
+                        const p = new MagicParticle(centerX, centerY, i % 2 === 0);
+                        const angle = (Math.PI * 2 / count) * i + (Math.random() * 0.4 - 0.2);
+                        const speed = Math.random() * 6.5 + 1.5; // 多層次擴散速度
+                        p.vx = Math.cos(angle) * speed;
+                        p.vy = Math.sin(angle) * speed;
+                        p.decay = Math.random() * 0.008 + 0.005; // 極致細膩長時間飄逸淡出
+                        p.size = i % 2 === 0 ? (Math.random() * 2.8 + 1.2) : (Math.random() * 1.5 + 0.6); // 細碎精緻
+                        particles.push(p);
+                    }
+                });
+            }
+
+            // 動畫循環
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].alpha <= 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
     </script>
 </body>
 </html>
